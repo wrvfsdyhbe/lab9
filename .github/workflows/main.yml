@@ -1,0 +1,66 @@
+ef add(a,b):
+    return a + b
+def test_add_success():
+    assert add(2,3) == 5
+def test_add_wrong():
+    assert add (2,2) != 5
+def get_user_age():
+    try:
+        age = int(input("Введите ваш возраст: "))
+        print(f"ваш возраст:{age}")
+    except ValueError:
+        print("Ошибка!!! ПОжалуйста введите только числа, а не буквы.")
+if __name__=="__main__":
+    get_user_age()
+
+
+
+
+
+
+
+def divide_numbers():
+    try:
+        num = int(input("введите число: "))
+        num2 = int(input("делимое число: "))
+        print(num / num2)
+    except ZeroDivisionError:
+        print("на ноль не делится!")
+    except ValueError:
+        print("ввели буквы!!!")
+
+if __name__=="__main__":
+    divide_numbers()
+    
+name: Python Project CI/CD
+
+on:
+  push:
+    branches: [ "владелец" ]  # 'master' дегенди 'владелец' деп алмаштырыңыз
+  pull_request:
+    branches: [ "владелец" ]
+
+jobs:
+  test-and-log-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Копирование кода
+      uses: actions/checkout@v3
+
+    - name: Установка Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Установка зависимостей
+      run: |
+        python -m pip install --upgrade pip
+
+    - name: Запуск тестов
+      run: python test_logic.py
+
+    - name: Проверка работы программы (Dry run)
+      run: |
+        echo "25" | python main.py 
+        if [ -f app.log ]; then echo "Лог-файл создан!"; else exit 1; fi
